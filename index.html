@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vatsal®</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+          theme: {
+            extend: {
+              fontFamily: {
+                display: ['Instrument Serif', 'serif'],
+                body: ['Inter', 'sans-serif'],
+              },
+              colors: {
+                background: 'hsl(201 100% 13%)',
+                foreground: 'hsl(0 0% 100%)',
+                'muted-foreground': 'hsl(240 4% 66%)',
+                primary: 'hsl(0 0% 100%)',
+                'primary-foreground': 'hsl(0 0% 4%)',
+                secondary: 'hsl(0 0% 10%)',
+                muted: 'hsl(0 0% 10%)',
+                accent: 'hsl(0 0% 10%)',
+                border: 'hsl(0 0% 18%)',
+                input: 'hsl(0 0% 18%)',
+              }
+            }
+          }
+        }
+    </script>
+    <style>
+        :root {
+          --font-display: 'Instrument Serif', serif;
+          --font-body: 'Inter', sans-serif;
+        }
+
+        body {
+          font-family: var(--font-body);
+        }
+
+        .liquid-glass {
+          background: rgba(255, 255, 255, 0.01);
+          background-blend-mode: luminosity;
+          backdrop-filter: blur(4px);
+          -webkit-backdrop-filter: blur(4px);
+          border: none;
+          box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+          position: relative;
+          overflow: hidden;
+        }
+
+        .liquid-glass::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          border-radius: inherit;
+          padding: 1.4px;
+          background: linear-gradient(180deg,
+            rgba(255,255,255,0.45) 0%,
+            rgba(255,255,255,0.15) 20%,
+            rgba(255,255,255,0) 40%,
+            rgba(255,255,255,0) 60%,
+            rgba(255,255,255,0.15) 80%,
+            rgba(255,255,255,0.45) 100%);
+          -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+          -webkit-mask-composite: xor;
+          mask-composite: exclude;
+          pointer-events: none;
+        }
+
+        @keyframes fade-rise {
+          from {
+            opacity: 0;
+            transform: translateY(24px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .animate-fade-rise {
+          animation: fade-rise 0.8s ease-out both;
+        }
+
+        .animate-fade-rise-delay {
+          animation: fade-rise 0.8s ease-out 0.2s both;
+        }
+
+        .animate-fade-rise-delay-2 {
+          animation: fade-rise 0.8s ease-out 0.4s both;
+        }
+
+        h1 {
+          font-family: 'Instrument Serif', serif;
+        }
+
+        .logo-text {
+          font-family: 'Instrument Serif', serif;
+        }
+    </style>
+</head>
+<body class="bg-background text-foreground overflow-x-hidden">
+<div id="root"></div>
+
+<script type="text/babel">
+    const { useState, useEffect, useCallback } = React;
+
+    const NavBar = () => {
+      const [isScrolled, setIsScrolled] = useState(false);
+
+      useEffect(() => {
+        const handleScroll = () => {
+          setIsScrolled(window.scrollY > 20);
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+      }, []);
+
+      return (
+        <nav className="relative z-10 flex flex-row justify-between px-8 py-6 max-w-7xl mx-auto w-full">
+          {/* Logo */}
+          <div className="logo-text text-3xl tracking-tight text-foreground">
+            Vatsal<sup className="text-xs align-super">®</sup>
+          </div>
+
+          {/* Nav Links - Hidden on mobile */}
+          <div className="hidden md:flex items-center space-x-8">
+            <a href="#home" className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 font-medium">Home</a>
+            <a href="#studio" className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 font-medium">Studio</a>
+            <a href="#about" className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 font-medium">About</a>
+            <a href="#journal" className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 font-medium">Journal</a>
+            <a href="#contact" className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 font-medium">Reach Us</a>
+          </div>
+
+          {/* CTA Button */}
+          <button className="liquid-glass rounded-full px-6 py-2.5 text-sm text-foreground font-medium hover:scale-[1.03] transition-transform duration-200">
+            Begin Journey
+          </button>
+        </nav>
+      );
+    };
+
+    const HeroSection = () => {
+      const handleCTAClick = useCallback((e) => {
+        e.preventDefault();
+        // Smooth scroll to next section or trigger animation
+        document.querySelector('#contact')?.scrollIntoView({
+          behavior: 'smooth'
+        });
+      }, []);
+
+      return (
+        <section className="relative z-10 flex flex-col items-center justify-center text-center px-6 pt-32 pb-40 min-h-screen">
+          {/* Video Background */}
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover z-0"
+          >
+            <source
+              src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260314_131748_f2ca2a28-fed7-44c8-b9a9-bd9acdd5ec31.mp4"
+              type="video/mp4"
+            />
+          </video>
+
+          <div className="relative z-10 w-full max-w-7xl mx-auto">
+            {/* H1 */}
+            <h1 className="text-5xl sm:text-7xl md:text-8xl leading-[0.95] tracking-[-2.46px] max-w-7xl mx-auto font-normal mb-8 animate-fade-rise">
+              v here <em className="not-italic text-muted-foreground">welcome back</em> we meet again.
+            </h1>
+
+            {/* Subtext */}
+            <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto mt-8 leading-relaxed animate-fade-rise-delay">
+              We're designing tools for deep thinkers, bold creators, and quiet rebels.
+              Amid the chaos, we build digital spaces for sharp focus and inspired work.
+            </p>
+
+            {/* Hero CTA */}
+            <button
+              onClick={handleCTAClick}
+              className="liquid-glass rounded-full px-14 py-5 text-base text-foreground font-medium mt-12 hover:scale-[1.03] transition-transform duration-200 cursor-pointer animate-fade-rise-delay-2"
+            >
+              Begin Journey
+            </button>
+          </div>
+        </section>
+      );
+    };
+
+    const App = () => {
+      return (
+        <div className="min-h-screen bg-background text-foreground">
+          <NavBar />
+          <HeroSection />
+        </div>
+      );
+    };
+
+    // Render the app
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+</script>
+</body>
+</html>
